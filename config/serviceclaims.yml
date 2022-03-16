@@ -1,0 +1,52 @@
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: tanzu-app-deploy-db
+  annotations:
+    autoscaling.knative.dev/minScale: "1"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"carto.run/v1alpha1","kind":"Workload","metadata":{"annotations":{"autoscaling.knative.dev/minScale":"1","serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions":"{\"kind\":\"ServiceClaimsExtension\",\"apiVersion\":\"supplychain.apps.x-tanzu.vmware.com/v1alpha1\",\"spec\":{\"serviceClaims\":{\"db\":{\"namespace\":\"postgresql\"}}}}"},"labels":{"app.kubernetes.io/part-of":"tanzu-app","apps.tanzu.vmware.com/has-tests":"true","apps.tanzu.vmware.com/workload-type":"web","tanzu.app.live.view":"true","tanzu.app.live.view.application.name":"tanzu-app"},"name":"tanzu-app-deploy","namespace":"dev"},"spec":{"env":[{"name":"SPRING_PROFILES_ACTIVE","value":"prod"}],"serviceClaims":[{"name":"db","ref":{"apiVersion":"sql.tanzu.vmware.com/v1","kind":"Postgres","name":"postgres-tanzu-app"}}],"source":{"git":{"ref":{"branch":"main"},"url":"https://github.com/beeNotice/tanzu-app"}}}}
+    serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions: '{"kind":"ServiceClaimsExtension","apiVersion":"supplychain.apps.x-tanzu.vmware.com/v1alpha1","spec":{"serviceClaims":{"db":{"namespace":"postgresql"}}}}'
+  labels:
+    app.kubernetes.io/part-of: tanzu-app
+    apps.tanzu.vmware.com/has-tests: "true"
+    apps.tanzu.vmware.com/workload-type: web
+    tanzu.app.live.view: "true"
+    tanzu.app.live.view.application.name: tanzu-app
+    app.kubernetes.io/component: run
+    carto.run/workload-name: tanzu-app-deploy
+spec:
+  ref:
+    namespace: postgresql
+    apiVersion: sql.tanzu.vmware.com/v1
+    kind: Postgres
+    name: postgres-tanzu-app
+---
+apiVersion: servicebinding.io/v1alpha3
+kind: ServiceBinding
+metadata:
+  name: tanzu-app-deploy-db
+  annotations:
+    autoscaling.knative.dev/minScale: "1"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"carto.run/v1alpha1","kind":"Workload","metadata":{"annotations":{"autoscaling.knative.dev/minScale":"1","serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions":"{\"kind\":\"ServiceClaimsExtension\",\"apiVersion\":\"supplychain.apps.x-tanzu.vmware.com/v1alpha1\",\"spec\":{\"serviceClaims\":{\"db\":{\"namespace\":\"postgresql\"}}}}"},"labels":{"app.kubernetes.io/part-of":"tanzu-app","apps.tanzu.vmware.com/has-tests":"true","apps.tanzu.vmware.com/workload-type":"web","tanzu.app.live.view":"true","tanzu.app.live.view.application.name":"tanzu-app"},"name":"tanzu-app-deploy","namespace":"dev"},"spec":{"env":[{"name":"SPRING_PROFILES_ACTIVE","value":"prod"}],"serviceClaims":[{"name":"db","ref":{"apiVersion":"sql.tanzu.vmware.com/v1","kind":"Postgres","name":"postgres-tanzu-app"}}],"source":{"git":{"ref":{"branch":"main"},"url":"https://github.com/beeNotice/tanzu-app"}}}}
+    serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions: '{"kind":"ServiceClaimsExtension","apiVersion":"supplychain.apps.x-tanzu.vmware.com/v1alpha1","spec":{"serviceClaims":{"db":{"namespace":"postgresql"}}}}'
+  labels:
+    app.kubernetes.io/part-of: tanzu-app
+    apps.tanzu.vmware.com/has-tests: "true"
+    apps.tanzu.vmware.com/workload-type: web
+    tanzu.app.live.view: "true"
+    tanzu.app.live.view.application.name: tanzu-app
+    app.kubernetes.io/component: run
+    carto.run/workload-name: tanzu-app-deploy
+spec:
+  name: db
+  service:
+    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+    kind: ResourceClaim
+    name: tanzu-app-deploy-db
+  workload:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: tanzu-app-deploy
+
