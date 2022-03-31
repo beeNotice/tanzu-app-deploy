@@ -13,23 +13,42 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/minScale: "1"
-        conventions.apps.tanzu.vmware.com/applied-conventions: ""
+        boot.spring.io/actuator: http://:8080/actuator
+        boot.spring.io/version: 2.5.9
+        conventions.apps.tanzu.vmware.com/applied-conventions: |-
+          appliveview-sample/app-live-view-connector
+          appliveview-sample/app-live-view-appflavours
+          appliveview-sample/app-live-view-systemproperties
+          spring-boot-convention/spring-boot
+          spring-boot-convention/spring-boot-graceful-shutdown
+          spring-boot-convention/spring-boot-web
+          spring-boot-convention/spring-boot-actuator
+          spring-boot-convention/service-intent-postgres
         developer.conventions/target-containers: workload
-        serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions: '{"kind":"ServiceClaimsExtension","apiVersion":"supplychain.apps.x-tanzu.vmware.com/v1alpha1","spec":{"serviceClaims":{"db":{"namespace":"postgresql"}}}}'
+        services.conventions.apps.tanzu.vmware.com/postgres: postgresql/42.2.24
       labels:
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: tanzu-app
         apps.tanzu.vmware.com/has-tests: "true"
         apps.tanzu.vmware.com/workload-type: web
         carto.run/workload-name: tanzu-app-deploy
+        conventions.apps.tanzu.vmware.com/framework: spring-boot
+        services.conventions.apps.tanzu.vmware.com/postgres: workload
+        tanzu.app.live.view: "true"
+        tanzu.app.live.view.application.flavours: spring-boot
+        tanzu.app.live.view.application.name: tanzu-app
     spec:
       containers:
       - env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: JAVA_TOOL_OPTIONS
-        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:40ab2961b3946133dc91d2e85d49d3474155edda21df00458bc237c048cf18ec
+          value: -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.server.port="8080" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
+        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:655115f31b23e99f014a3ab7d1e5f878f7cbefff67e3e8bf1617c185012ec75a
         name: workload
+        ports:
+        - containerPort: 8080
+          protocol: TCP
         resources: {}
         securityContext:
           runAsUser: 1000

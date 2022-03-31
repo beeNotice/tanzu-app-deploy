@@ -4,7 +4,6 @@ metadata:
   name: tanzu-app-deploy-db
   annotations:
     autoscaling.knative.dev/minScale: "1"
-    serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions: '{"kind":"ServiceClaimsExtension","apiVersion":"supplychain.apps.x-tanzu.vmware.com/v1alpha1","spec":{"serviceClaims":{"db":{"namespace":"postgresql"}}}}'
   labels:
     app.kubernetes.io/part-of: tanzu-app
     apps.tanzu.vmware.com/has-tests: "true"
@@ -13,7 +12,6 @@ metadata:
     carto.run/workload-name: tanzu-app-deploy
 spec:
   ref:
-    namespace: postgresql
     apiVersion: sql.tanzu.vmware.com/v1
     kind: Postgres
     name: postgres-tanzu-app
@@ -24,7 +22,6 @@ metadata:
   name: tanzu-app-deploy-db
   annotations:
     autoscaling.knative.dev/minScale: "1"
-    serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions: '{"kind":"ServiceClaimsExtension","apiVersion":"supplychain.apps.x-tanzu.vmware.com/v1alpha1","spec":{"serviceClaims":{"db":{"namespace":"postgresql"}}}}'
   labels:
     app.kubernetes.io/part-of: tanzu-app
     apps.tanzu.vmware.com/has-tests: "true"
