@@ -6,8 +6,6 @@ metadata:
     app.kubernetes.io/part-of: tanzu-app
     apps.tanzu.vmware.com/has-tests: "true"
     apps.tanzu.vmware.com/workload-type: web
-    tanzu.app.live.view: "true"
-    tanzu.app.live.view.application.name: tanzu-app
     app.kubernetes.io/component: run
     carto.run/workload-name: tanzu-app-deploy
 spec:
@@ -27,8 +25,6 @@ spec:
           spring-boot-convention/spring-boot-actuator
           spring-boot-convention/service-intent-postgres
         developer.conventions/target-containers: workload
-        kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"carto.run/v1alpha1","kind":"Workload","metadata":{"annotations":{"autoscaling.knative.dev/minScale":"1","serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions":"{\"kind\":\"ServiceClaimsExtension\",\"apiVersion\":\"supplychain.apps.x-tanzu.vmware.com/v1alpha1\",\"spec\":{\"serviceClaims\":{\"db\":{\"namespace\":\"postgresql\"}}}}"},"labels":{"app.kubernetes.io/part-of":"tanzu-app","apps.tanzu.vmware.com/has-tests":"true","apps.tanzu.vmware.com/workload-type":"web","tanzu.app.live.view":"true","tanzu.app.live.view.application.name":"tanzu-app"},"name":"tanzu-app-deploy","namespace":"dev"},"spec":{"env":[{"name":"SPRING_PROFILES_ACTIVE","value":"prod"}],"serviceClaims":[{"name":"db","ref":{"apiVersion":"sql.tanzu.vmware.com/v1","kind":"Postgres","name":"postgres-tanzu-app"}}],"source":{"git":{"ref":{"branch":"main"},"url":"https://github.com/beeNotice/tanzu-app"}}}}
         serviceclaims.supplychain.apps.x-tanzu.vmware.com/extensions: '{"kind":"ServiceClaimsExtension","apiVersion":"supplychain.apps.x-tanzu.vmware.com/v1alpha1","spec":{"serviceClaims":{"db":{"namespace":"postgresql"}}}}'
         services.conventions.apps.tanzu.vmware.com/postgres: postgresql/42.2.24
       labels:
@@ -49,7 +45,7 @@ spec:
           value: prod
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.server.port="8080" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:4568f65f456f7ffc05a99cf5f64ef046f7c5db0fa054a8639b6b61d128cf5ab7
+        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:4f937d368d8003e6732b7fba6b7459e8658dc03bbf01b077a26a07bf6af00a8f
         name: workload
         ports:
         - containerPort: 8080
