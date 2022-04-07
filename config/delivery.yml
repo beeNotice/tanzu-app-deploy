@@ -13,22 +13,42 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/minScale: "1"
-        conventions.apps.tanzu.vmware.com/applied-conventions: ""
+        boot.spring.io/actuator: http://:8080/actuator
+        boot.spring.io/version: 2.5.9
+        conventions.apps.tanzu.vmware.com/applied-conventions: |-
+          appliveview-sample/app-live-view-connector
+          appliveview-sample/app-live-view-appflavours
+          appliveview-sample/app-live-view-systemproperties
+          spring-boot-convention/spring-boot
+          spring-boot-convention/spring-boot-graceful-shutdown
+          spring-boot-convention/spring-boot-web
+          spring-boot-convention/spring-boot-actuator
+          spring-boot-convention/service-intent-postgres
         developer.conventions/target-containers: workload
+        services.conventions.apps.tanzu.vmware.com/postgres: postgresql/42.2.24
       labels:
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: tanzu-app
         apps.tanzu.vmware.com/has-tests: "true"
         apps.tanzu.vmware.com/workload-type: web
         carto.run/workload-name: tanzu-app-deploy
+        conventions.apps.tanzu.vmware.com/framework: spring-boot
+        services.conventions.apps.tanzu.vmware.com/postgres: workload
+        tanzu.app.live.view: "true"
+        tanzu.app.live.view.application.flavours: spring-boot
+        tanzu.app.live.view.application.name: tanzu-app
     spec:
       containers:
       - env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: JAVA_TOOL_OPTIONS
-        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:5467b39c31daaecda65db56512986b7ff212d496f9fad2d30a321e6e5497535a
+          value: -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include="*" -Dmanagement.server.port="8080" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
+        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:fc838349971214c03f34af73bd3e83601141f37476c806e062109de1a89b6f8b
         name: workload
+        ports:
+        - containerPort: 8080
+          protocol: TCP
         resources: {}
         securityContext:
           runAsUser: 1000
