@@ -27,7 +27,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: JAVA_TOOL_OPTIONS
-        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:e8577e46dc974d0d7e5c6d152f04976c50e3d163488662fad11ed913aa69a3c5
+        image: harbor.withtanzu.com/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:5467b39c31daaecda65db56512986b7ff212d496f9fad2d30a321e6e5497535a
         name: workload
         resources: {}
         securityContext:
