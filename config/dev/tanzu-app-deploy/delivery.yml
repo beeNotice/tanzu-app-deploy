@@ -46,7 +46,7 @@ spec:
           value: prod
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:1b57a83326e5f653ce72c3fd7937406fd37b081957d4aa1cb8ef3f5af38b4044
+        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:eaaedd2925e5f514adc35ef3be2838dae0e012a4fbf49bfe198bf78aa815073b
         name: workload
         ports:
         - containerPort: 8080
