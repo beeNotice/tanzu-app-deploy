@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: scg-test
 data:
-  property: "lol"
+  property: "lol-2"
   super-feature: "enabled"
