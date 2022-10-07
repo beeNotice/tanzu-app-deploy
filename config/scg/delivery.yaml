@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scg-test
+data:
+  property: "lol"
+  super-feature: "enabled"
