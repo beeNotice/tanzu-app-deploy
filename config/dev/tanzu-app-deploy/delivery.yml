@@ -2,6 +2,9 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: tanzu-app-deploy
+  annotations:
+    ootb.apps.tanzu.vmware.com/servicebinding-workload: "true"
+    ootb.apps.tanzu.vmware.com/apidescriptor-ref: "true"
   labels:
     app.kubernetes.io/part-of: tanzu-app
     apps.tanzu.vmware.com/has-tests: "true"
@@ -14,12 +17,13 @@ spec:
       annotations:
         autoscaling.knative.dev/minScale: "1"
         boot.spring.io/actuator: http://:8081/actuator
-        boot.spring.io/version: 2.5.9
-        conventions.apps.tanzu.vmware.com/applied-conventions: |-
+        boot.spring.io/version: 2.7.4
+        conventions.carto.run/applied-conventions: |-
           spring-boot-convention/spring-boot
           spring-boot-convention/spring-boot-graceful-shutdown
           spring-boot-convention/spring-boot-web
           spring-boot-convention/spring-boot-actuator
+          spring-boot-convention/spring-boot-actuator-probes
           appliveview-sample/app-live-view-appflavour-check
           appliveview-sample/app-live-view-connector-boot
           appliveview-sample/app-live-view-appflavours-boot
@@ -42,12 +46,22 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: JAVA_TOOL_OPTIONS
-          value: -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:a28837807233e6b8be69d506b50e5ef96b131d52921c1052fde6602218cf7c31
+          value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
+        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:87ff913d5f3e2a1c09033a5a85f8832e050ac167842acb7f6caebaeef611a27f
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 8080
+            scheme: HTTP
         name: workload
         ports:
         - containerPort: 8080
           protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+            scheme: HTTP
         resources: {}
         securityContext:
           runAsUser: 1000
