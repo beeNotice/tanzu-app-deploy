@@ -7,6 +7,7 @@ metadata:
     ootb.apps.tanzu.vmware.com/apidescriptor-ref: "true"
     kapp.k14s.io/change-rule: upsert after upserting servicebinding.io/ServiceBindings
   labels:
+    apis.apps.tanzu.vmware.com/register-api: "true"
     app.kubernetes.io/part-of: tanzu-app
     apps.tanzu.vmware.com/has-tests: "true"
     apps.tanzu.vmware.com/workload-type: web
@@ -31,6 +32,7 @@ spec:
           appliveview-sample/app-live-view-appflavour-check
         developer.conventions/target-containers: workload
       labels:
+        apis.apps.tanzu.vmware.com/register-api: "true"
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: tanzu-app
         apps.tanzu.vmware.com/auto-configure-actuators: "false"
@@ -50,7 +52,7 @@ spec:
           value: prod
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.health.probes.enabled="true" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:d904400386978b0b7b35098a9b493e3c07ddde9fa1b8d4214ef27122e4d9b5fd
+        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:fd5fe1ccfb7fd5a1133da3c9b39f6aa7b843bd10b4e02b8b5085faba77919fa9
         livenessProbe:
           httpGet:
             path: /livez
