@@ -14,8 +14,8 @@ metadata:
 spec:
   type: openapi
   description: The Tanzu Simple API
-  system: tanzu-app-system
-  owner: default-team
+  system: default/tanzu-app-system
+  owner: default/default-team
   location:
     path: /v3/api-docs
     baseURL:
