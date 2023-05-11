@@ -7,7 +7,6 @@ metadata:
     ootb.apps.tanzu.vmware.com/apidescriptor-ref: "true"
     kapp.k14s.io/change-rule: upsert after upserting servicebinding.io/ServiceBindings
   labels:
-    apis.apps.tanzu.vmware.com/register-api: "true"
     app.kubernetes.io/part-of: tanzu-app
     apps.tanzu.vmware.com/has-tests: "true"
     apps.tanzu.vmware.com/workload-type: web
@@ -31,8 +30,9 @@ spec:
           spring-boot-convention/app-live-view-appflavours-boot
           appliveview-sample/app-live-view-appflavour-check
         developer.conventions/target-containers: workload
+        kubectl.kubernetes.io/last-applied-configuration: |
+          {"apiVersion":"carto.run/v1alpha1","kind":"Workload","metadata":{"annotations":{"autoscaling.knative.dev/minScale":"1"},"labels":{"app.kubernetes.io/part-of":"tanzu-app","apps.tanzu.vmware.com/has-tests":"true","apps.tanzu.vmware.com/workload-type":"web"},"name":"tanzu-app-deploy","namespace":"dev"},"spec":{"build":{"env":[{"name":"BP_JVM_VERSION","value":"17.*"}]},"env":[{"name":"SPRING_PROFILES_ACTIVE","value":"prod"}],"source":{"git":{"ref":{"branch":"main"},"url":"ssh://git@github.com/beeNotice/tanzu-simple"}}}}
       labels:
-        apis.apps.tanzu.vmware.com/register-api: "true"
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: tanzu-app
         apps.tanzu.vmware.com/auto-configure-actuators: "false"
@@ -52,7 +52,7 @@ spec:
           value: prod
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.health.probes.enabled="true" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:b22838e96bb378cb90bb88c21a93b44f626d10b6d4f717ce1db359bf8885feef
+        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:acf2891bcce103d7fc424f8b9513975fcabc053dd89fc554e16a56fca0ef419f
         livenessProbe:
           httpGet:
             path: /livez
