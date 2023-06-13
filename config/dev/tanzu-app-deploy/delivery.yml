@@ -55,7 +55,7 @@ spec:
           value: prod
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.health.probes.enabled="true" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:3228c3e056bb056d969edfccc48a79394e030876f099afe1e3a33d363b9fa1d5
+        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:9a673a9a23618737b6a92b7c12b5ea14aa745db23a9f6f1dd5ad814fbcf57d90
         livenessProbe:
           httpGet:
             path: /livez
