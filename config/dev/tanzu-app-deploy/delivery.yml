@@ -1,77 +1,11 @@
-apiVersion: serving.knative.dev/v1
-kind: Service
+apiVersion: awsblueprints.io/v1alpha1
+kind: ServerlessApp
 metadata:
   name: tanzu-app-deploy
-  annotations:
-    ootb.apps.tanzu.vmware.com/servicebinding-workload: "true"
-    ootb.apps.tanzu.vmware.com/apidescriptor-ref: "true"
-    kapp.k14s.io/change-rule: upsert after upserting servicebinding.io/ServiceBindings
-  labels:
-    apis.apps.tanzu.vmware.com/register-api: "true"
-    app.kubernetes.io/part-of: tanzu-app
-    apps.tanzu.vmware.com/has-tests: "true"
-    apps.tanzu.vmware.com/workload-type: web
-    app.kubernetes.io/component: run
-    carto.run/workload-name: tanzu-app-deploy
 spec:
-  template:
-    metadata:
-      annotations:
-        autoscaling.knative.dev/minScale: "1"
-        boot.spring.io/version: 3.1.0
-        conventions.carto.run/applied-conventions: |-
-          appliveview-sample/app-live-view-appflavour-check
-          spring-boot-convention/auto-configure-actuators-check
-          spring-boot-convention/spring-boot
-          spring-boot-convention/spring-boot-graceful-shutdown
-          spring-boot-convention/spring-boot-web
-          spring-boot-convention/spring-boot-actuator
-          spring-boot-convention/spring-boot-actuator-probes
-          spring-boot-convention/app-live-view-appflavour-check
-          spring-boot-convention/app-live-view-connector-boot
-          spring-boot-convention/app-live-view-appflavours-boot
-          spring-boot-convention/service-intent-postgres
-        developer.conventions/target-containers: workload
-        services.conventions.carto.run/postgres: postgresql/42.6.0
-      labels:
-        apis.apps.tanzu.vmware.com/register-api: "true"
-        app.kubernetes.io/component: run
-        app.kubernetes.io/part-of: tanzu-app
-        apps.tanzu.vmware.com/auto-configure-actuators: "false"
-        apps.tanzu.vmware.com/has-tests: "true"
-        apps.tanzu.vmware.com/workload-type: web
-        carto.run/workload-name: tanzu-app-deploy
-        conventions.carto.run/framework: spring-boot
-        services.conventions.carto.run/postgres: workload
-        tanzu.app.live.view: "true"
-        tanzu.app.live.view.application.actuator.path: actuator
-        tanzu.app.live.view.application.actuator.port: "8080"
-        tanzu.app.live.view.application.flavours: spring-boot
-        tanzu.app.live.view.application.name: tanzu-app-deploy
-    spec:
-      containers:
-      - env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: prod
-        - name: JAVA_TOOL_OPTIONS
-          value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.health.probes.enabled="true" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:312529483397f06ea35cf1708083fe361b932ff69a9f0eda0ad4e927dface502
-        livenessProbe:
-          httpGet:
-            path: /livez
-            port: 8080
-            scheme: HTTP
-        name: workload
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8080
-            scheme: HTTP
-        resources: {}
-        securityContext:
-          runAsUser: 1000
-      serviceAccountName: default
+  imageName: fmartin.azurecr.io/fmartin/tanzu-app-tap/tanzu-app-deploy-dev@sha256:796e18c38ae1764b62c50df0068f4d622c1de883bdc396647e7cb4aac27416de
+  memorySize: 128
+  resourceConfig:
+    providerConfigName: aws-provider-config
+    region: us-west-1
 
